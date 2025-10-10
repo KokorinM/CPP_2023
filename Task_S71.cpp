@@ -1,52 +1,69 @@
 #include <iostream>
+#include <iomanip>
 
 class CreditCard {
 private:
-    int Number;     // номер карты
-    double Balance; // текущий баланс
+    int Number;      // номер из 4 цифр
+    float Balance;   // баланс карты в рублях
 
 public:
-    // Конструктор: инициализирует номер карты и начальный баланс
-    CreditCard(int num, double bal) : Number(num), Balance(bal) {}
+    // Конструктор
+    CreditCard(int number, float balance)
+        : Number(number), Balance(balance) {}
 
-    // Пополнение баланса
-    void Put(double amount) {
-        if (amount > 0) {
-            Balance += amount;
+    // Поместить деньги на карту
+    void Put(float amount) {
+        if (amount <= 0.0f) {
+            std::cout << "Сумма должна быть положительной.\n";
+            return;
         }
+        Balance += amount;
+        std::cout << "Положено: " << std::fixed << std::setprecision(2) << amount
+                  << " Р. Текущий баланс: " << Balance << " Р.\n";
     }
 
-    // Снятие средств с баланса
-    void Take(double amount) {
-        if (amount > 0 && amount <= Balance) {
-            Balance -= amount;
+    // Снять деньги с карты
+    void Take(float amount) {
+        if (amount <= 0.0f) {
+            std::cout << "Сумма должна быть положительной.\n";
+            return;
         }
+        if (amount > Balance) {
+            std::cout << "Недостаточно средств. Текущий баланс: "
+                      << std::fixed << std::setprecision(2) << Balance << " Р.\n";
+            return;
+        }
+        Balance -= amount;
+        std::cout << "Снято: " << std::fixed << std::setprecision(2) << amount
+                  << " Р. Текущий баланс: " << Balance << " Р.\n";
     }
 
-    // Пример вспомогательного метода для вывода состояния карты
-    void print() const {
-        std::cout << "Card Number: " << Number << ", Balance: " << Balance << std::endl;
+    // Метод для вывода информации о карте
+    void PrintInfo() const {
+        std::cout << "Карта #" << Number << ", баланс: "
+                  << std::fixed << std::setprecision(2) << Balance << " Р.\n";
     }
 };
 
 int main() {
-    // Создание объекта CreditCard с номером 1234 и балансом 50
-    CreditCard firstCC(1234, 50);
+    // Создание объекта: номер 1234, баланс 50 Р.
+    CreditCard firstCC(1234, 50.0f);
 
-    // Объявление указателя на CreditCard и привязка к объекту
+    // Вызов метода через объект
+    firstCC.PrintInfo();
+
+    // Создание указателя на объект
     CreditCard* pCard = &firstCC;
 
-    // Демонстрация обращения к методам через указатель с использованием ->
-    // 1) вывод текущего состояния через метод print
-    pCard->print();
+    // Демонстрация обращения к методам по указателю (->)
+    pCard->Put(25.0f);    // положить 25 Р
+    pCard->Take(10.5f);   // снять 10.5 Р
 
-    // 2) добавление средств через Put
-    pCard->Put(25);       // баланс становится 75
-    pCard->print();
+    // Попытка снять больше, чем есть
+    pCard->Take(100.0f);
 
-    // 3) снятие средств через Take
-    pCard->Take(10);       // баланс становится 65
-    pCard->print();
+    // Финальное состояние
+    pCard->PrintInfo();
 
     return 0;
 }
