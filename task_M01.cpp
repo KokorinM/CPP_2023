@@ -1,18 +1,18 @@
 #include <iostream>
 
 int main() {
-    const int n = 10; // размер таблицы (1..10)
+    const int n = 10; 
 
-    // Верхняя строка-заголовок
+    
     std::cout << "\t";
     for (int j = 1; j <= n; ++j) {
         std::cout << j << "\t";
     }
     std::cout << "\n";
 
-    // Таблица умножения
+   
     for (int i = 1; i <= n; ++i) {
-        std::cout << i << "\t"; // левый столбец-заголовок
+        std::cout << i << "\t"; 
         for (int j = 1; j <= n; ++j) {
             std::cout << (i * j) << "\t";
         }
@@ -21,3 +21,4 @@ int main() {
 
     return 0;
 }
+
